@@ -1,0 +1,6 @@
+navItem{
+    background-color: red;
+    display: flex;
+    flex-direction: row;
+    height: 10vh;
+}
