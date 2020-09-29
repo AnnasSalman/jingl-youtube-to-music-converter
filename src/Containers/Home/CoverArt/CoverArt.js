@@ -14,6 +14,7 @@ const CoverArt = props => {
     const [data, setData] = useState([])
     const [currentIndex, setcurrentIndex] = useState(0)
     const [url, seturl] = useState(location.state.artData[0].image)
+    const [loading, setLoading] = useState(false)
 
     useEffect(()=>{
         setData(location.state.artData)
@@ -25,6 +26,7 @@ const CoverArt = props => {
     }
 
     const confirmHandler = async () => {
+        setLoading(true)
         try{
             const tags = await axios.request({
                 url: '/gettags',
@@ -34,9 +36,11 @@ const CoverArt = props => {
                         ...location.state.state.tagSources
                 }
             })
+            setLoading(false)
             history.push("/tags", {...location.state, tagData: tags.data, selected: {coverArt: url}});
         }
         catch(e){
+            setLoading(false)
             console.log(e)
         }
     }
@@ -55,7 +59,7 @@ const CoverArt = props => {
             </FlexboxGrid>
             <FlexboxGrid justify='end' align='middle' style={styles.buttonBar}>
                 <FlexboxGrid.Item>
-                    <Button color="blue" onClick={confirmHandler}>
+                    <Button color="blue" onClick={confirmHandler} loading={loading}>
                         <Icon icon="check"/> Confirm & Continue
                     </Button>
                 </FlexboxGrid.Item>

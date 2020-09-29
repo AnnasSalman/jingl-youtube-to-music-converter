@@ -37,19 +37,24 @@ const TagCarousel = props => {
 
     const _openModal = () => setOpenModal(true)
     const _closeModal = () => setOpenModal(false)
-    const _changeHandler = (index) => {
-        //props.onChange(index)
+    const _changeHandler = (index, title) => {
+        if(props.onChange){
+            props.onChange(index, title, props.name)
+        }
         setCurrentIndex(index)
     }
-    const _selectHandler = (index) => {
+    const _selectHandler = (index, title) => {
         setCurrentIndex(index)
         slide.current.slickGoTo(index, false)
+        if(props.onChange){
+            props.onChange(index, title, props.name)
+        }
     }
 
 
 
     return(
-        <FlexboxGrid justify={'center'} style={styles.container}>
+        <FlexboxGrid justify={'center'} align={'middle'} style={styles.container}>
             <div style={styles.title}>
                 <h6 style={styles.titleText}>{props.name}</h6>
                 <div style={styles.smallText}>{props.data.length} Results Found</div>
@@ -64,7 +69,7 @@ const TagCarousel = props => {
             <Slider
                 {...settings}
                 style={styles.slide}
-                afterChange={(index)=>_changeHandler(index)}
+                afterChange={(index)=>_changeHandler(index, props.data[index].title)}
                 ref={slide}>
                 {
                     props.data.map((element, index)=>(
@@ -95,7 +100,7 @@ const TagCarousel = props => {
                                 <FlexboxGrid.Item componentClass={Col} colspan={24} sm={24} md={8} key={el.id}>
                                     <div
                                         style={currentIndex===index?styles.modalElementsSelected:styles.modalElements}
-                                        onClick={()=>_selectHandler(index)}
+                                        onClick={()=>_selectHandler(index, el.title)}
                                     >
                                         {
                                             currentIndex===index?
@@ -127,15 +132,15 @@ const TagCarousel = props => {
 const settings = {
     dots: false,
     infinite: false,
-    speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    adaptiveHeight: true
+    speed: 500
 };
 
 const styles = {
     container: {
         width: 280,
+        minHeight: 170,
         padding: 15,
         paddingTop: 0,
         paddingBottom: 4,
@@ -154,18 +159,19 @@ const styles = {
     info: {
         width: '100%',
         display: 'flex',
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     slideElement: {
-        height: 90
+        height: 90,
     },
     bottom: {
         width: '100%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: 8
+        marginTop: 8,
     },
     titleText: {
         color: theme.primaryDark,

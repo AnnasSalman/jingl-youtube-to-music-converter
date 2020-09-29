@@ -1,14 +1,21 @@
 import React, {useState, useEffect} from 'react'
-import {Button, FlexboxGrid, Col} from "rsuite";
+import {Button, FlexboxGrid, Col, Icon} from "rsuite";
 import TagCarousel from "../../../components/TagCarousel/TagCarousle";
 import ConversionSteps from "../../../components/ConversionSteps/ConversionSteps";
 import {useHistory, useLocation} from "react-router-dom";
 
 const arr = [1,2,3,6,4,3,4,4,3]
 
-const arrayToString = () => {
-
-}
+const dataTypes = [
+    {key: 'title', name: 'Song Title'},
+    {key: 'artist', name: 'Artist(s)'},
+    {key: 'album', name: 'Album'},
+    {key: 'albumReleaseDate', name: 'Album Release Date'},
+    {key: 'tracks', name: 'Number of Tracks'},
+    {key: 'label', name: 'Label(s)'},
+    {key: 'genre', name: 'Genre'},
+    {key: 'artistPicture', name: 'Artist Image', image: true},
+]
 
 const Tags = () => {
 
@@ -24,6 +31,16 @@ const Tags = () => {
         genre: [],
         artistPicture: []
     })
+    const [selected, setSelected] = useState({
+        title:null,
+        artist:null,
+        album:null,
+        albumReleaseDate:null,
+        tracks:null,
+        label: null,
+        genre: null,
+        artistPicture: null
+    })
 
     const filterTags = (tagData) => {
         const title=[]
@@ -37,6 +54,7 @@ const Tags = () => {
         tagData.forEach((tag)=>{
             if(tag.title){
                 title.push({id:tag.id, title: tag.title, source: tag.source})
+
             }
             if(tag.artist){
                 artist.push({id:tag.id, title: tag.artist, source: tag.source})
@@ -65,82 +83,65 @@ const Tags = () => {
         })
     }
 
+    const _changeHandler = (title, type) =>{
+        console.log(selected)
+        setSelected({...selected, [type]: title})
+    }
+    const confirmHandler = () => {
+        history.push("/confirm", {...location.state, selected: {...location.state.selected, tags: selected}});
+    }
+
     useEffect(()=>{
+        console.log('Effect 1 called')
         const tags = filterTags(location.state.tagData)
         console.log(tags)
         setTags(tags)
     },[location.state.tagData])
 
+    useEffect(()=>{
+        let selectedTemp = {}
+        dataTypes.forEach((type)=>{
+            if(tags[type.key].length>0){
+                console.log(type.key+":"+ tags[type.key][0].title)
+                selectedTemp = {...selectedTemp, [type.key]: tags[type.key][0].title}
+            }
+            else{
+                selectedTemp = {...selectedTemp, [type.key]: null}
+            }
+        })
+        setSelected(selectedTemp)
+    },[tags])
+
     return(
         <div>
             <ConversionSteps currentStep={2}/>
             <FlexboxGrid justify={"start"} style={styles.container}>
-                {tags.title.length>0?
-                    <FlexboxGrid.Item colspan={24} componentClass={Col} md={8} sm={12} style={styles.element}>
-                        <TagCarousel
-                            data={tags.title}
-                            name='Song Title'
-                        />
-                    </FlexboxGrid.Item>:null
+                {
+                    dataTypes.map((type)=>{
+                        if(tags[type.key].length>0){
+                            return(
+                                <FlexboxGrid.Item colspan={24} componentClass={Col} md={8} sm={12} style={styles.element}>
+                                    <TagCarousel
+                                        image={type.image?true:false}
+                                        data={tags[type.key]}
+                                        name={type.name}
+                                        onChange={(index, title, name)=>_changeHandler(title, type.key)}
+                                    />
+                                </FlexboxGrid.Item>
+                            )
+                        }
+                        else{
+                            return null
+                        }
+                    })
                 }
-                {tags.artist.length>0?
-                    <FlexboxGrid.Item colspan={24} componentClass={Col} md={8} sm={12} style={styles.element}>
-                        <TagCarousel
-                            data={tags.artist}
-                            name='Artist(s)'
-                        />
-                    </FlexboxGrid.Item>:null
-                }
-                {tags.album.length>0?
-                    <FlexboxGrid.Item colspan={24} componentClass={Col} md={8} sm={12} style={styles.element}>
-                        <TagCarousel
-                            data={tags.album}
-                            name='Album'
-                        />
-                    </FlexboxGrid.Item> :null
-                }
-                {tags.albumReleaseDate.length>0?
-                    <FlexboxGrid.Item colspan={24} componentClass={Col} md={8} sm={12} style={styles.element}>
-                        <TagCarousel
-                            data={tags.albumReleaseDate}
-                            //data={[{id:"XHAKSA", title: 22, source:'Deezer'}]}
-                            name='Album Release Date'
-                        />
-                    </FlexboxGrid.Item>:null
-                }
-                {tags.tracks.length>0?
-                    <FlexboxGrid.Item colspan={24} componentClass={Col} md={8} sm={12} xs={24} style={styles.element}>
-                        <TagCarousel
-                            data={tags.tracks}
-                            name='Tracks'
-                        />
-                    </FlexboxGrid.Item>:null
-                }
-                {tags.label.length>0?
-                    <FlexboxGrid.Item colspan={24} componentClass={Col} md={8} sm={12} style={styles.element}>
-                        <TagCarousel
-                            data={tags.label}
-                            name='Label(s)'
-                        />
-                    </FlexboxGrid.Item>:null
-                }
-                {tags.genre.length>0?
-                    <FlexboxGrid.Item colspan={24} componentClass={Col} md={8} sm={12} style={styles.element}>
-                        <TagCarousel
-                            data={tags.genre}
-                            name='Genre'
-                        />
-                    </FlexboxGrid.Item>:null
-                }
-                {tags.artistPicture.length>0?
-                    <FlexboxGrid.Item colspan={24} componentClass={Col} md={8} sm={12} style={styles.element}>
-                        <TagCarousel
-                            image
-                            data={tags.artistPicture}
-                            name='Artist Image'
-                        />
-                    </FlexboxGrid.Item>:null
-                }
+                <FlexboxGrid justify='end' align='middle' style={styles.buttonBar}>
+                    <FlexboxGrid.Item>
+                        <Button color="blue" onClick={confirmHandler}>
+                            <Icon icon="check"/> Confirm & Continue
+                        </Button>
+                    </FlexboxGrid.Item>
+                </FlexboxGrid>
             </FlexboxGrid>
         </div>
     )
