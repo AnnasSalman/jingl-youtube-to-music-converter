@@ -6,7 +6,7 @@ const ConversionSteps = props => {
         <Steps current={props.currentStep}>
             <Steps.Item
                 title="Search"
-                description="Paste a Youtube video link or search a youtube video by entering keywords"
+                description="Paste a Youtube video link to get started"
             />
             <Steps.Item
                 title="Cover Art"

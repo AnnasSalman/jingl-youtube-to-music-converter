@@ -6,6 +6,7 @@ import {useLocation, useHistory} from 'react-router-dom'
 import axios from 'axios'
 import TagCarousel from "../../../components/TagCarousel/TagCarousle";
 
+
 const CoverArt = props => {
 
     const history = useHistory()

@@ -14,8 +14,8 @@ const MusicLink = props => {
     const [searchDetails, setSearchDetails] = useState({
         searchText: '',
         artSources: {
-            musicbrainz: true,
-            discogs: false,
+            musicbrainz: false,
+            discogs: true,
             lastfm: true,
             deezer: true
         },
@@ -95,8 +95,8 @@ const MusicLink = props => {
                         <h4 style={styles.heading}>Tag Sources</h4>
                         <Checkbox
                             defaultChecked={searchDetails.tagSources.musicbrainz}
-                            onCheckboxClick={()=>setSearchDetails({...searchDetails, tagSources: {...searchDetails.tagSources, musicbrainz: !searchDetails.tagSources.musicbrainz}})}>MusicBrainz
-                        >MusicBrainz</Checkbox>
+                            onCheckboxClick={()=>setSearchDetails({...searchDetails, tagSources: {...searchDetails.tagSources, musicbrainz: !searchDetails.tagSources.musicbrainz}})}>
+                        MusicBrainz</Checkbox>
                         <Checkbox
                             defaultChecked={searchDetails.tagSources.discogs}
                             onCheckboxClick={()=>setSearchDetails({...searchDetails, tagSources: {...searchDetails.tagSources, discogs: !searchDetails.tagSources.discogs}})}

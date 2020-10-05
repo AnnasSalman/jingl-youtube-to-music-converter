@@ -6,7 +6,7 @@ import axios from 'axios'
 import Keys from "../../../constants/Keys";
 
 const downloadFile = (filename) => {
-    window.location.href = Keys.serverDownloadBaseUrl+'?filename='+filename
+    window.location.href = Keys.serverDownloadBaseUrl+'?filename='+encodeURIComponent(filename)
 }
 
 const Confirm = props => {
@@ -45,7 +45,7 @@ const Confirm = props => {
     console.log(musicState)
 
     return(
-        <div>
+        <div style={styles.container}>
             <ConversionSteps currentStep={3}/>
             <FlexboxGrid justify={"center"} align={"middle"} style={styles.songContainer}>
                 <FlexboxGrid.Item componentClass={Col} colspan={24} md={10} sm={24} xs={24} style={styles.arts}>
@@ -56,20 +56,20 @@ const Confirm = props => {
                     <p>Song Title:</p>
                     <h5 style={styles.name}>{musicState.selected.tags.title}</h5>
                     <p>Artist(s):</p>
-                    <h5 style={styles.name}>{musicState.selected.tags.artist.toString()}</h5>
+                    <h5 style={styles.name}>{musicState.selected.tags.artist?musicState.selected.tags.artist.toString():'-'}</h5>
                     <p>Album:</p>
                     <h5 style={styles.name}>{musicState.selected.tags.album}</h5>
                     <p>Album Release Date:</p>
                     <h5 style={styles.name}>{musicState.selected.tags.albumReleaseDate}</h5>
                     <p>Genre:</p>
-                    <h5 style={styles.name}>{musicState.selected.tags.genre}</h5>
-                    <p>Label(s)</p>
-                    <h5 style={styles.name}>{musicState.selected.tags.label.toString()}</h5>
+                    <h5 style={styles.name}>{musicState.selected.tags.genre?musicState.selected.tags.genre.toString():'-'}</h5>
                     <p>Tracks:</p>
                     <h5 style={styles.name}>{musicState.selected.tags.tracks}</h5>
                 </FlexboxGrid.Item>
                 <FlexboxGrid.Item componentClass={Col} colspan={24} md= {8} sm={12} xs={12}>
                     <div>
+                        <p>Label(s)</p>
+                        <h5 style={styles.name}>{musicState.selected.tags.label?musicState.selected.tags.label.toString():'-'}</h5>
                         <p>Artist Image:</p>
                         <img src={musicState.selected.tags.artistPicture} alt={'Artist'} style={styles.imageSmall}/>
                     </div>
@@ -88,6 +88,10 @@ const Confirm = props => {
 }
 
 const styles = {
+    container: {
+      display: 'flex',
+      flexDirection: 'column'
+    },
     songContainer: {
         height: '50vh',
         marginTop: 25
