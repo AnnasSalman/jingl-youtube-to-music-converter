@@ -1,3 +1,23 @@
+## Screenshots
+### Add Video Url
+![jingl-video-converter herokuapp com_ (1)](https://user-images.githubusercontent.com/57415883/101484286-37829f00-397b-11eb-8cc7-bf0c479aed47.png)
+
+### Select Album Art
+![step2](https://user-images.githubusercontent.com/57415883/101487524-26885c80-3980-11eb-9007-7f3288ebad09.JPG)
+![step2modal](https://user-images.githubusercontent.com/57415883/101487640-4881df00-3980-11eb-850f-0a288db1c2eb.JPG)
+
+### Select Music Tags
+![step3](https://user-images.githubusercontent.com/57415883/101487740-66e7da80-3980-11eb-9a86-1bf72d67b204.JPG)
+![step3 modal](https://user-images.githubusercontent.com/57415883/101487879-9eef1d80-3980-11eb-9e0f-f878e20301b7.JPG)
+
+### Preview and Download
+![step4](https://user-images.githubusercontent.com/57415883/101487933-b5957480-3980-11eb-92da-652c8c277987.JPG)
+
+
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
